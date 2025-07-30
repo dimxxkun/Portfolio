@@ -221,20 +221,6 @@
         .contact-form button:hover {
             background-color: #2980b9;
         }
-        .contact-form .success-message, .contact-form .error-message {
-            margin-top: 1rem;
-            padding: 0.75rem;
-            border-radius: 4px;
-            display: none;
-        }
-        .contact-form .success-message {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .contact-form .error-message {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
         .social-links a {
             color: #3498db;
             margin-right: 1rem;
@@ -490,9 +476,7 @@
             <input type="email" id="email" name="email" required aria-required="true" aria-label="Your Email">
             <label for="message">Message:</label>
             <textarea id="message" name="message" rows="4" required aria-required="true" aria-label="Your Message"></textarea>
-            <button type="submit">Send Message</button>
-            <div class="success-message">Your message has been sent successfully!</div>
-            <div class="error-message">Failed to send message. Please try again later.</div>
+            <button type="button" onclick="sendEmail()">Send Message</button>
         </form>
     </section>
 
@@ -500,12 +484,7 @@
         <p>© <script>document.write(new Date().getFullYear());</script> Sanusi Abdulfatai Oyewunmi. All rights reserved.</p>
     </footer>
 
-    <!-- EmailJS SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
-        // Initialize EmailJS with your User ID
-        emailjs.init("YOUR_USER_ID"); // Replace with your EmailJS User ID
-
         document.addEventListener('DOMContentLoaded', () => {
             const sections = document.querySelectorAll('section');
             const observer = new IntersectionObserver((entries) => {
@@ -542,40 +521,27 @@
                 });
             });
 
-            // Handle form submission
-            document.getElementById('contactForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const name = document.getElementById('name').value.trim();
-                const email = document.getElementById('email').value.trim();
-                const message = document.getElementById('message').value.trim();
-                const successMessage = document.querySelector('.success-message');
-                const errorMessage = document.querySelector('.error-message');
+            window.sendEmail = function() {
+                const name = document.getElementById('name').value.trim() || '';
+                const email = document.getElementById('email').value.trim() || '';
+                const message = document.getElementById('message').value.trim() || '';
 
                 if (!name || !email || !message) {
-                    errorMessage.textContent = 'Please fill in all fields before sending.';
-                    errorMessage.style.display = 'block';
-                    successMessage.style.display = 'none';
+                    alert('Please fill in all fields before sending.');
                     return;
                 }
 
-                // Send email using EmailJS
-                emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
-                    name: name,
-                    email: email,
-                    message: message
-                })
-                .then(() => {
-                    successMessage.style.display = 'block';
-                    errorMessage.style.display = 'none';
-                    document.getElementById('contactForm').reset();
-                })
-                .catch(() => {
-                    errorMessage.textContent = 'Failed to send message. Please try again later.';
-                    errorMessage.style.display = 'block';
-                    successMessage.style.display = 'none';
-                });
-            });
+                const subject = encodeURIComponent(`Contact from ${name}`);
+                const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nMessage: ${message}`);
+                const mailtoLink = `mailto:workabdulfatai@gmail.com?subject=${subject}&body=${body}`;
+
+                const success = window.open(mailtoLink, '_blank');
+                if (!success || success.closed || typeof success.closed === 'undefined') {
+                    alert('Could not open email client. Please copy the email address workabdulfatai@gmail.com and send your message manually.');
+                }
+
+                document.getElementById('contactForm').reset();
+            };
         });
     </script>
 </body>
