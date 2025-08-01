@@ -652,16 +652,9 @@
 
             function trackCVDownload() {
                 const BASE_CV_COUNT = 57; // Initial CV downloads count
-                const visitorId = localStorage.getItem('visitorId') || `visitor_${Math.random().toString(36).substr(2, 9)}`;
                 let currentCount = localStorage.getItem('cvDownloadsCount') ? parseInt(localStorage.getItem('cvDownloadsCount'), 10) : BASE_CV_COUNT;
-                const hasDownloaded = localStorage.getItem(`hasDownloaded_${visitorId}`);
-
-                if (!hasDownloaded) {
-                    currentCount += 1;
-                    localStorage.setItem('cvDownloadsCount', currentCount);
-                    localStorage.setItem(`hasDownloaded_${visitorId}`, 'true');
-                    localStorage.setItem('visitorId', visitorId);
-                }
+                currentCount += 1;
+                localStorage.setItem('cvDownloadsCount', currentCount);
 
                 // Trigger Google Analytics event
                 gtag('event', 'download_cv', { 'event_category': 'CTA', 'event_label': 'Download CV' });
