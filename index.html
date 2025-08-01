@@ -257,6 +257,26 @@
         #education {
             margin-bottom: 2rem;
         }
+        /* Animation for count-up */
+        .count-up {
+            display: inline-block;
+            font-weight: 700;
+            color: #3498db;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        .count-up.animate {
+            animation: bounce 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -285,7 +305,7 @@
 
     <section id="about">
         <h2>About Me</h2>
-        <p>Experienced GIS and Remote Sensing Analyst with 5+ years of practical expertise in spatial data analysis, environmental monitoring, and network mapping, including 2+ years of specialized experience in applying GIS to Electrical Power Systems optimization. I am technically adept, solutions-oriented, detail-driven, and thrive in collaborative, multidisciplinary environments. I specialize in leveraging ArcGIS Pro, Esri Enterprise, QGIS, Arc FM Electric, and other tools to support infrastructure planning, optimize energy distribution, and drive sustainable urban development.</p>
+        <p>Experienced GIS and Remote Sensing Analyst with <span class="count-up" id="years">0</span> years of practical expertise in spatial data analysis, environmental monitoring, and network mapping, including 2+ years of specialized experience in applying GIS to Electrical Power Systems optimization. I am technically adept, solutions-oriented, detail-driven, and thrive in collaborative, multidisciplinary environments. I specialize in leveraging ArcGIS Pro, Esri Enterprise, QGIS, Arc FM Electric, and other tools to support infrastructure planning, optimize energy distribution, and drive sustainable urban development.</p>
         <h3>Core Competence</h3>
         <ul>
             <li>GIS & Remote Sensing: ArcGIS Pro, ArcMap, QGIS, Google Earth Pro, Esri Enterprise, GeoJSON, Geonode, GeoServer, OGC Standards</li>
@@ -305,6 +325,19 @@
     <section id="experience">
         <h2>Experience</h2>
         <div class="timeline">
+            <div class="job">
+                <h3>GIS Analyst - Proforce Limited: Proforce Galaxies</h3>
+                <p><em>Ogun State / August 2025 - Present</em></p>
+                <ul>
+                    <li>Process and interpret satellite imagery, including SAR, multispectral, and optical datasets, to extract actionable geospatial insights for security and surveillance applications.</li>
+                    <li>Develop GIS workflows to support downstream services, such as Satellite Data-as-a-Service (SDaaS), for homeland security, border monitoring, and infrastructure protection.</li>
+                    <li>Create interactive maps, dashboards, and visualizations using ArcGIS Pro and Esri Enterprise to integrate geospatial data into web, desktop, and mobile platforms for diverse clients.</li>
+                    <li>Collaborate with front-end and back-end developers to embed geospatial insights into client-facing applications, enhancing real-time data delivery and decision-making.</li>
+                    <li>Support satellite mission planning by defining geospatial requirements for tasking, including coverage areas, temporal frequency, and spatial resolution.</li>
+                    <li>Automate geospatial analysis and reporting tasks using Python and ArcPy, improving efficiency and scalability of data processing pipelines.</li>
+                    <li>Ensure data quality and integrity through validation pipelines, maintaining accuracy for critical security and defense applications.</li>
+                </ul>
+            </div>
             <div class="job">
                 <h3>GIS Analyst (NYSC) - Ibadan Electricity Distribution Company (IBEDC)</h3>
                 <p><em>Oyo State / July 2024 - June 2025</em></p>
@@ -487,10 +520,16 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const sections = document.querySelectorAll('section');
+            const yearsElement = document.getElementById('years');
+            let isAnimating = false;
+
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
+                        if (entry.target.id === 'about' && !isAnimating) {
+                            startCountUp();
+                        }
                     }
                 });
             }, { threshold: 0.1 });
@@ -498,6 +537,35 @@
             sections.forEach(section => {
                 observer.observe(section);
             });
+
+            function startCountUp() {
+                if (isAnimating) return;
+                isAnimating = true;
+                yearsElement.textContent = '0';
+                let count = 0;
+                const target = 5;
+                const duration = 2000; // 2 seconds
+                const incrementTime = duration / target;
+
+                const updateCount = () => {
+                    if (count < target) {
+                        count++;
+                        yearsElement.textContent = count;
+                        yearsElement.classList.add('animate');
+                        setTimeout(() => yearsElement.classList.remove('animate'), 300);
+                        setTimeout(updateCount, incrementTime);
+                    } else {
+                        yearsElement.textContent = '5+';
+                        yearsElement.classList.add('animate');
+                        setTimeout(() => {
+                            yearsElement.classList.remove('animate');
+                            isAnimating = false;
+                        }, 300);
+                    }
+                };
+
+                updateCount();
+            }
 
             window.toggleMenu = function() {
                 const navLinks = document.getElementById('navLinks');
@@ -517,6 +585,9 @@
                         const menuToggle = document.querySelector('.menu-toggle');
                         navLinks.classList.remove('active');
                         menuToggle.classList.remove('active');
+                        if (targetId === '#home' && !isAnimating) {
+                            startCountUp();
+                        }
                     }
                 });
             });
