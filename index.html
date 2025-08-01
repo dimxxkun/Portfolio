@@ -109,6 +109,8 @@
         .hero h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
+            display: inline-block;
+            position: relative;
         }
         .hero h2 {
             font-size: 1.2rem;
@@ -313,6 +315,40 @@
         .stat-item .count-up {
             font-size: 2rem;
         }
+        /* Animation for the 'S' in the name */
+        .animated-s {
+            display: inline-block;
+            position: relative;
+        }
+        .animate-s {
+            animation: moveS 3s ease-in-out forwards;
+        }
+        @keyframes moveS {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                transform: translate(50px, -50px) rotate(90deg);
+                opacity: 0.5;
+            }
+            40% {
+                transform: translate(-50px, 50px) rotate(180deg);
+                opacity: 0.7;
+            }
+            60% {
+                transform: translate(30px, -30px) rotate(270deg);
+                opacity: 0.9;
+            }
+            80% {
+                transform: translate(-20px, 20px) rotate(360deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -333,7 +369,7 @@
         </nav>
         <section id="home">
             <div class="hero">
-                <h1>Sanusi Abdulfatai Oyewunmi</h1>
+                <h1><span class="animated-s">S</span>anusi Abdulfatai Oyewunmi</h1>
                 <h2>GIS & Remote Sensing Analyst | Utility Network Analyst | Esri Enterprise Certified | 3rd Place, Esri Young Scholar Award, Nigeria 2025</h2>
                 <a href="https://drive.google.com/file/d/1qBGP7FS2n1Zx_ADzn9184ZwUsrID7Os2/view?usp=sharing" class="cta-button">Download CV</a>
             </div>
@@ -569,6 +605,7 @@
             const sections = document.querySelectorAll('section');
             const yearsElement = document.getElementById('years');
             const pageViewsElement = document.getElementById('pageViews');
+            const animatedS = document.querySelector('.animated-s');
             let isAnimating = false;
 
             const observer = new IntersectionObserver((entries) => {
@@ -580,6 +617,12 @@
                         }
                         if (entry.target.id === 'stats' && !isAnimating) {
                             startPageViewsCount();
+                        }
+                        if (entry.target.id === 'home') {
+                            // Trigger the 'S' animation
+                            animatedS.classList.remove('animate-s');
+                            void animatedS.offsetWidth; // Force reflow to restart animation
+                            animatedS.classList.add('animate-s');
                         }
                     }
                 });
@@ -657,6 +700,10 @@
                         menuToggle.classList.remove('active');
                         if (targetId === '#home' && !isAnimating) {
                             startCountUp('years', 5, 2000, '5+');
+                            // Trigger the 'S' animation on navigation click
+                            animatedS.classList.remove('animate-s');
+                            void animatedS.offsetWidth; // Force reflow to restart animation
+                            animatedS.classList.add('animate-s');
                         }
                         if (targetId === '#stats' && !isAnimating) {
                             startPageViewsCount();
