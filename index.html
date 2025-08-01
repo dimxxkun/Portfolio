@@ -335,7 +335,7 @@
             <div class="hero">
                 <h1>Sanusi Abdulfatai Oyewunmi</h1>
                 <h2>GIS & Remote Sensing Analyst | Utility Network Analyst | Esri Enterprise Certified | 3rd Place, Esri Young Scholar Award, Nigeria 2025</h2>
-                <a href="https://drive.google.com/file/d/1qBGP7FS2n1Zx_ADzn9184ZwUsrID7Os2/view?usp=sharing" class="cta-button" onclick="trackCVDownload()">Download CV</a>
+                <a href="https://drive.google.com/file/d/1qBGP7FS2n1Zx_ADzn9184ZwUsrID7Os2/view?usp=sharing" class="cta-button">Download CV</a>
             </div>
         </section>
     </header>
@@ -557,10 +557,6 @@
                 <h3>Page Views</h3>
                 <p><span class="count-up" id="pageViews">0</span></p>
             </div>
-            <div class="stat-item">
-                <h3>CV Downloads</h3>
-                <p><span class="count-up" id="cvDownloads">0</span></p>
-            </div>
         </div>
     </section>
 
@@ -573,7 +569,6 @@
             const sections = document.querySelectorAll('section');
             const yearsElement = document.getElementById('years');
             const pageViewsElement = document.getElementById('pageViews');
-            const cvDownloadsElement = document.getElementById('cvDownloads');
             let isAnimating = false;
 
             const observer = new IntersectionObserver((entries) => {
@@ -585,7 +580,6 @@
                         }
                         if (entry.target.id === 'stats' && !isAnimating) {
                             startPageViewsCount();
-                            startCVDownloadsCount();
                         }
                     }
                 });
@@ -643,23 +637,6 @@
                 startCountUp('pageViews', target, 2000);
             }
 
-            function startCVDownloadsCount() {
-                const BASE_CV_COUNT = 57; // Initial CV downloads count
-                let currentCount = localStorage.getItem('cvDownloadsCount') ? parseInt(localStorage.getItem('cvDownloadsCount'), 10) : BASE_CV_COUNT;
-                const target = Math.min(currentCount, 1000); // Cap at 1000 for animation
-                startCountUp('cvDownloads', target, 2000);
-            }
-
-            function trackCVDownload() {
-                const BASE_CV_COUNT = 57; // Initial CV downloads count
-                let currentCount = localStorage.getItem('cvDownloadsCount') ? parseInt(localStorage.getItem('cvDownloadsCount'), 10) : BASE_CV_COUNT;
-                currentCount += 1;
-                localStorage.setItem('cvDownloadsCount', currentCount);
-
-                // Trigger Google Analytics event
-                gtag('event', 'download_cv', { 'event_category': 'CTA', 'event_label': 'Download CV' });
-            }
-
             window.toggleMenu = function() {
                 const navLinks = document.getElementById('navLinks');
                 const menuToggle = document.querySelector('.menu-toggle');
@@ -683,7 +660,6 @@
                         }
                         if (targetId === '#stats' && !isAnimating) {
                             startPageViewsCount();
-                            startCVDownloadsCount();
                         }
                     }
                 });
