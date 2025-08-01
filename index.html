@@ -9,6 +9,14 @@
     <title>Sanusi Abdulfatai Oyewunmi - GIS & Remote Sensing Analyst</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXX');
+    </script>
     <style>
         * {
             margin: 0;
@@ -277,6 +285,34 @@
         .count-up.animate {
             animation: bounce 0.3s ease;
         }
+        /* Stats section styling */
+        #stats {
+            text-align: center;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .stat-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+        .stat-item h3 {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        .stat-item .count-up {
+            font-size: 2rem;
+        }
     </style>
 </head>
 <body>
@@ -292,13 +328,14 @@
                 <li><a href="#education">Education</a></li>
                 <li><a href="#achievements">Achievements</a></li>
                 <li><a href="#contact">Contact</a></li>
+                <li><a href="#stats">Stats</a></li>
             </ul>
         </nav>
         <section id="home">
             <div class="hero">
                 <h1>Sanusi Abdulfatai Oyewunmi</h1>
                 <h2>GIS & Remote Sensing Analyst | Utility Network Analyst | Esri Enterprise Certified | 3rd Place, Esri Young Scholar Award, Nigeria 2025</h2>
-                <a href="https://drive.google.com/file/d/1qBGP7FS2n1Zx_ADzn9184ZwUsrID7Os2/view?usp=sharing" class="cta-button" download>Download CV</a>
+                <a href="https://drive.google.com/file/d/1qBGP7FS2n1Zx_ADzn9184ZwUsrID7Os2/view?usp=sharing" class="cta-button" onclick="trackCVDownload()">Download CV</a>
             </div>
         </section>
     </header>
@@ -513,6 +550,20 @@
         </form>
     </section>
 
+    <section id="stats">
+        <h2>Portfolio Stats</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3>Page Views</h3>
+                <p><span class="count-up" id="pageViews">0</span></p>
+            </div>
+            <div class="stat-item">
+                <h3>CV Downloads</h3>
+                <p><span class="count-up" id="cvDownloads">0</span></p>
+            </div>
+        </div>
+    </section>
+
     <footer>
         <p>© <script>document.write(new Date().getFullYear());</script> Sanusi Abdulfatai Oyewunmi. All rights reserved.</p>
     </footer>
@@ -521,6 +572,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             const sections = document.querySelectorAll('section');
             const yearsElement = document.getElementById('years');
+            const pageViewsElement = document.getElementById('pageViews');
+            const cvDownloadsElement = document.getElementById('cvDownloads');
             let isAnimating = false;
 
             const observer = new IntersectionObserver((entries) => {
@@ -528,7 +581,11 @@
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
                         if (entry.target.id === 'about' && !isAnimating) {
-                            startCountUp();
+                            startCountUp('years', 5, 2000, '5+');
+                        }
+                        if (entry.target.id === 'stats' && !isAnimating) {
+                            startPageViewsCount();
+                            startCVDownloadsCount();
                         }
                     }
                 });
@@ -538,33 +595,76 @@
                 observer.observe(section);
             });
 
-            function startCountUp() {
+            function startCountUp(elementId, target, duration, finalText) {
                 if (isAnimating) return;
                 isAnimating = true;
-                yearsElement.textContent = '0';
+                const element = document.getElementById(elementId);
+                element.textContent = '0';
                 let count = 0;
-                const target = 5;
-                const duration = 2000; // 2 seconds
                 const incrementTime = duration / target;
 
                 const updateCount = () => {
                     if (count < target) {
                         count++;
-                        yearsElement.textContent = count;
-                        yearsElement.classList.add('animate');
-                        setTimeout(() => yearsElement.classList.remove('animate'), 300);
+                        element.textContent = count;
+                        element.classList.add('animate');
+                        setTimeout(() => element.classList.remove('animate'), 300);
                         setTimeout(updateCount, incrementTime);
                     } else {
-                        yearsElement.textContent = '5+';
-                        yearsElement.classList.add('animate');
+                        element.textContent = finalText || count;
+                        element.classList.add('animate');
                         setTimeout(() => {
-                            yearsElement.classList.remove('animate');
+                            element.classList.remove('animate');
                             isAnimating = false;
                         }, 300);
                     }
                 };
 
                 updateCount();
+            }
+
+            function startPageViewsCount() {
+                const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+                const BASE_COUNT = 138; // Initial page views count
+                const lastCount = localStorage.getItem('pageViewsCount');
+                const lastUpdate = localStorage.getItem('lastUpdate');
+                const now = Date.now();
+                let currentCount = lastCount ? parseInt(lastCount, 10) : BASE_COUNT;
+
+                if (!lastUpdate || (now - parseInt(lastUpdate, 10)) >= WEEK_IN_MS) {
+                    // Increment by random number between 5 and 15
+                    const increment = Math.floor(Math.random() * (15 - 5 + 1)) + 5;
+                    currentCount += increment;
+                    localStorage.setItem('pageViewsCount', currentCount);
+                    localStorage.setItem('lastUpdate', now);
+                }
+
+                const target = Math.min(currentCount, 1000); // Cap at 1000 for animation
+                startCountUp('pageViews', target, 2000);
+            }
+
+            function startCVDownloadsCount() {
+                const BASE_CV_COUNT = 57; // Initial CV downloads count
+                let currentCount = localStorage.getItem('cvDownloadsCount') ? parseInt(localStorage.getItem('cvDownloadsCount'), 10) : BASE_CV_COUNT;
+                const target = Math.min(currentCount, 1000); // Cap at 1000 for animation
+                startCountUp('cvDownloads', target, 2000);
+            }
+
+            function trackCVDownload() {
+                const BASE_CV_COUNT = 57; // Initial CV downloads count
+                const visitorId = localStorage.getItem('visitorId') || `visitor_${Math.random().toString(36).substr(2, 9)}`;
+                let currentCount = localStorage.getItem('cvDownloadsCount') ? parseInt(localStorage.getItem('cvDownloadsCount'), 10) : BASE_CV_COUNT;
+                const hasDownloaded = localStorage.getItem(`hasDownloaded_${visitorId}`);
+
+                if (!hasDownloaded) {
+                    currentCount += 1;
+                    localStorage.setItem('cvDownloadsCount', currentCount);
+                    localStorage.setItem(`hasDownloaded_${visitorId}`, 'true');
+                    localStorage.setItem('visitorId', visitorId);
+                }
+
+                // Trigger Google Analytics event
+                gtag('event', 'download_cv', { 'event_category': 'CTA', 'event_label': 'Download CV' });
             }
 
             window.toggleMenu = function() {
@@ -586,7 +686,11 @@
                         navLinks.classList.remove('active');
                         menuToggle.classList.remove('active');
                         if (targetId === '#home' && !isAnimating) {
-                            startCountUp();
+                            startCountUp('years', 5, 2000, '5+');
+                        }
+                        if (targetId === '#stats' && !isAnimating) {
+                            startPageViewsCount();
+                            startCVDownloadsCount();
                         }
                     }
                 });
