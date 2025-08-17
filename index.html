@@ -860,16 +860,6 @@
                     document.getElementById('contactForm').reset();
                 }, 1000);
             }
-
-            // Track project link clicks for analytics
-            document.querySelectorAll('.project a').forEach(link => {
-                link.addEventListener('click', () => {
-                    gtag('event', 'project_view', {
-                        'event_category': 'Project',
-                        'event_label': link.closest('.project').querySelector('h3').textContent
-                    });
-                });
-            });
         });
     </script>
 </body>
