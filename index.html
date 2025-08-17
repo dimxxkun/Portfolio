@@ -699,9 +699,9 @@
                             startCountUp('years', 5, 2000, '5+');
                         }
                         if (entry.target.id === 'stats' && !isAnimating) {
-                            startCountUp('projectsCompleted', 8, 2000);
-                            startCountUp('certificationsEarned', 9, 2000);
-                            startPageViewsCount();
+                            startCountUp('pageViews', 178, 2000, '178+');
+                            startCountUp('projectsCompleted', 8, 2000, '8+');
+                            startCountUp('certificationsEarned', 10, 2000, '10+');
                         }
                         if (entry.target.id === 'home') {
                             animatedS.classList.remove('animate-s');
@@ -742,26 +742,6 @@
                 updateCount();
             }
 
-            // Page views counter with localStorage
-            function startPageViewsCount() {
-                const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000;
-                const BASE_COUNT = 138;
-                const lastCount = localStorage.getItem('pageViewsCount');
-                const lastUpdate = localStorage.getItem('lastUpdate');
-                const now = Date.now();
-                let currentCount = lastCount ? parseInt(lastCount, 10) : BASE_COUNT;
-
-                if (!lastUpdate || (now - parseInt(lastUpdate, 10)) >= WEEK_IN_MS) {
-                    const increment = Math.floor(Math.random() * (15 - 5 + 1)) + 5;
-                    currentCount += increment;
-                    localStorage.setItem('pageViewsCount', currentCount);
-                    localStorage.setItem('lastUpdate', now);
-                }
-
-                const target = Math.min(currentCount, 1000);
-                startCountUp('pageViews', target, 2000);
-            }
-
             // Toggle navigation menu
             window.toggleMenu = function() {
                 const navLinks = document.getElementById('navLinks');
@@ -797,9 +777,9 @@
                             animatedS.classList.add('animate-s');
                         }
                         if (targetId === '#stats' && !isAnimating) {
-                            startCountUp('projectsCompleted', 8, 2000);
-                            startCountUp('certificationsEarned', 9, 2000);
-                            startPageViewsCount();
+                            startCountUp('pageViews', 178, 2000, '178+');
+                            startCountUp('projectsCompleted', 8, 2000, '8+');
+                            startCountUp('certificationsEarned', 10, 2000, '10+');
                         }
                     }
                 });
