@@ -1,23 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Portfolio of Sanusi Abdulfatai Oyewunmi, GIS & Remote Sensing Analyst with expertise in spatial data analysis and utility network optimization.">
     <meta name="keywords" content="GIS, Remote Sensing, ArcGIS, Esri, Utility Network, Spatial Analysis, Sanusi Abdulfatai">
     <meta name="author" content="Sanusi Abdulfatai Oyewunmi">
+    <!-- Open Graph and Twitter Card Tags for Social Media -->
+    <meta property="og:title" content="Sanusi Abdulfatai Oyewunmi - GIS & Remote Sensing Analyst">
+    <meta property="og:description" content="Portfolio of Sanusi Abdulfatai Oyewunmi, GIS & Remote Sensing Analyst with expertise in spatial data analysis and utility network optimization.">
+    <meta property="og:image" content="path/to/profile-image.jpg">
+    <meta property="og:url" content="https://yourwebsite.com">
+    <meta name="twitter:card" content="summary_large_image">
     <title>Sanusi Abdulfatai Oyewunmi - GIS & Remote Sensing Analyst</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google tag gtag.js -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXX"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Google tag (gtag.js) - Replace G-YOUR_ACTUAL_ID with your actual Google Analytics ID -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YOUR_ACTUAL_ID"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-XXXXX');
+      gtag('config', 'G-YOUR_ACTUAL_ID');
     </script>
     <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --text-color: #333;
+            --header-bg: linear-gradient(135deg, #2c3e50, #3498db);
+            --card-bg: white;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #f4f4f9;
+            --header-bg: linear-gradient(135deg, #1c2526, #1e90ff);
+            --card-bg: #2c2c2c;
+            --shadow-color: rgba(255, 255, 255, 0.1);
+        }
         * {
             margin: 0;
             padding: 0;
@@ -25,12 +45,12 @@
             font-family: 'Roboto', sans-serif;
         }
         body {
-            background-color: #f4f4f9;
-            color: #333;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             line-height: 1.6;
         }
         header {
-            background: linear-gradient(135deg, #2c3e50, #3498db);
+            background: var(--header-bg);
             color: white;
             text-align: center;
             padding: 2rem 0;
@@ -43,7 +63,7 @@
             background: rgba(0, 0, 0, 0.7);
             position: fixed;
             width: 100%;
-            top: 0;
+            topflutter: 0;
             z-index: 1000;
         }
         .logo {
@@ -70,6 +90,7 @@
             font-size: 1.5rem;
             color: white;
             cursor: pointer;
+            user-select: none;
         }
         .menu-toggle.active::before {
             content: '✕';
@@ -91,6 +112,14 @@
             .menu-toggle {
                 display: block;
             }
+        }
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-left: 1rem;
         }
         .hero {
             padding: 5rem 2rem;
@@ -117,6 +146,7 @@
             font-weight: 300;
             margin-bottom: 2rem;
             word-wrap: break-word;
+            max-width: 600px;
         }
         .cta-button {
             display: inline-block;
@@ -140,7 +170,7 @@
             transform: translateY(20px);
             transition: opacity 0.6s ease, transform 0.6s ease;
         }
-        section.visible {
+        section(visible) {
             opacity: 1;
             transform: translateY(0);
         }
@@ -157,11 +187,11 @@
             padding-left: 2rem;
         }
         .timeline .job {
-            background: white;
+            background: var(--card-bg);
             padding: 1.5rem;
             margin-bottom: 1.5rem;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px var(--shadow-color);
             transition: transform 0.3s ease;
         }
         .timeline .job:hover {
@@ -173,11 +203,11 @@
             gap: 1.5rem;
         }
         .project {
-            background: white;
+            background: var(--card-bg);
             padding: 1.5rem;
             margin-bottom: 2rem;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px var(--shadow-color);
             transition: transform 0.3s ease;
         }
         .project:hover {
@@ -218,6 +248,9 @@
             border-radius: 4px;
             font-size: 1rem;
         }
+        .contact-form input:invalid, .contact-form textarea:invalid {
+            border-color: #e74c3c;
+        }
         .contact-form button {
             padding: 0.75rem 1.5rem;
             background-color: #3498db;
@@ -230,6 +263,10 @@
         }
         .contact-form button:hover {
             background-color: #2980b9;
+        }
+        .contact-form button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
         .social-links a {
             color: #3498db;
@@ -298,10 +335,10 @@
             margin-top: 2rem;
         }
         .stat-item {
-            background: white;
+            background: var(--card-bg);
             padding: 1.5rem;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px var(--shadow-color);
             transition: transform 0.3s ease;
         }
         .stat-item:hover {
@@ -349,13 +386,38 @@
                 opacity: 1;
             }
         }
+        @media (prefers-reduced-motion: reduce) {
+            .animated-s {
+                animation: none;
+            }
+            .count-up.animate {
+                animation: none;
+            }
+        }
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .back-to-top.visible {
+            display: block;
+        }
     </style>
 </head>
 <body>
     <header>
         <nav>
             <div class="logo">Sanusi Abdulfatai</div>
-            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+            <div class="menu-toggle" onclick="toggleMenu()" tabindex="0" role="button" aria-label="Toggle Navigation Menu">☰</div>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
@@ -366,9 +428,14 @@
                 <li><a href="#contact">Contact</a></li>
                 <li><a href="#stats">Stats</a></li>
             </ul>
+            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
         </nav>
         <section id="home">
             <div class="hero">
+                <!-- Replace path/to/profile-image.jpg with the actual image path -->
+                <img src="path/to/profile-image.jpg" alt="Sanusi Abdulfatai Oyewunmi" class="hero-img" loading="lazy">
                 <h1><span class="animated-s">S</span>anusi Abdulfatai Oyewunmi</h1>
                 <h2>GIS & Remote Sensing Analyst | Utility Network Analyst | Esri Enterprise Certified | 3rd Place, Esri Young Scholar Award, Nigeria 2025</h2>
                 <a href="https://drive.google.com/file/d/1qBGP7FS2n1Zx_ADzn9184ZwUsrID7Os2/view?usp=sharing" class="cta-button">Download CV</a>
@@ -489,17 +556,17 @@
             <div class="project">
                 <h3>SpillTrack: Satellite-Based Oil Spill Assessment in Rivers State</h3>
                 <p>Conducted oil spill assessments in Oyingbo, Rivers State using satellite imagery and GIS tools to support environmental monitoring and impact evaluation.</p>
-                <p>(Project details available upon request)</p>
+                <p><a href="mailto:work.abdulfatai@gmail.com" target="_blank">Contact for Details</a></p>
             </div>
             <div class="project">
                 <h3>GridView: Mapping Electricity Network Assets in Osun State</h3>
                 <p>Published the spatial distribution of 11kV and 33kV electricity network assets across five Business Hubs in Osun State using Esri Enterprise Portal, enhancing visibility for planning and operational decisions.</p>
-                <p></p>
+                <p><a href="mailto:work.abdulfatai@gmail.com" target="_blank">Contact for Details</a></p>
             </div>
             <div class="project">
                 <h3>CINTrack: Customer Enumeration & Data Collection for Utility Optimization</h3>
                 <p>Participated in customer enumeration and Customer Identification Number (CIN) data collection to support accurate billing, network planning, and improved service delivery across target areas.</p>
-                <p></p>
+                <p><a href="mailto:work.abdulfatai@gmail.com" target="_blank">Contact for Details</a></p>
             </div>
             <div class="project">
                 <h3>GeoTutor: Teaching GIS & Remote Sensing on YouTube</h3>
@@ -509,12 +576,12 @@
             <div class="project">
                 <h3>InfraGIS: Geospatial Analysis for Network Optimization at IBEDC</h3>
                 <p>Contributed to the integration and analysis of geospatial data using ArcGIS Pro to support IBEDC’s infrastructure optimization and enhance network efficiency at Geotechnics Services Limited (GSL).</p>
-                <p></p>
+                <p><a href="mailto:work.abdulfatai@gmail.com" target="_blank">Contact for Details</a></p>
             </div>
             <div class="project">
                 <h3>Geointel: Solving Real-World Challenges with GIS & IT</h3>
                 <p>Founder of Geointel, a solutions-driven company leveraging GIS and IT to address challenges across diverse industries. Currently leading projects that deliver geospatial intelligence and data-driven solutions for improved decision-making in sectors such as agriculture, real estate, utilities, and environmental management.</p>
-                <p></p>
+                <p><a href="mailto:work.abdulfatai@gmail.com" target="_blank">Contact for Details</a></p>
             </div>
         </div>
     </section>
@@ -534,7 +601,7 @@
             <h3>Seed of Life College, Ibadan</h3>
             <p>WAEC - Sciences (2017)</p>
         </div>
-        <h2>Selected Training & Certifications</h2>
+        <h3>Selected Training & Certifications</h3>
         <div>
             <ul>
                 <li>Esri MOOC | Going Places with Spatial Analysis – 2025 <a href="https://drive.google.com/file/d/1MFsQM1KbTLa8FXNosa-CtPfekv7Add9E/view?usp=drive_link" target="_blank">View</a></li>
@@ -582,7 +649,7 @@
             <input type="email" id="email" name="email" required aria-required="true" aria-label="Your Email">
             <label for="message">Message:</label>
             <textarea id="message" name="message" rows="4" required aria-required="true" aria-label="Your Message"></textarea>
-            <button type="button" onclick="sendEmail()">Send Message</button>
+            <button type="submit">Send Message</button>
         </form>
     </section>
 
@@ -593,21 +660,37 @@
                 <h3>Page Views</h3>
                 <p><span class="count-up" id="pageViews">0</span></p>
             </div>
+            <div class="stat-item">
+                <h3>Projects Completed</h3>
+                <p><span class="count-up" id="projectsCompleted">0</span></p>
+            </div>
+            <div class="stat-item">
+                <h3>Certifications Earned</h3>
+                <p><span class="count-up" id="certificationsEarned">0</span></p>
+            </div>
         </div>
     </section>
 
     <footer>
-        <p>© <script>document.write(new Date().getFullYear());</script> Sanusi Abdulfatai Oyewunmi. All rights reserved.</p>
+        <p id="footer-text"></p>
     </footer>
+
+    <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top">↑ Top</button>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const sections = document.querySelectorAll('section');
             const yearsElement = document.getElementById('years');
             const pageViewsElement = document.getElementById('pageViews');
+            const projectsCompletedElement = document.getElementById('projectsCompleted');
+            const certificationsEarnedElement = document.getElementById('certificationsEarned');
             const animatedS = document.querySelector('.animated-s');
             let isAnimating = false;
 
+            // Set footer year
+            document.getElementById('footer-text').textContent = `© ${new Date().getFullYear()} Sanusi Abdulfatai Oyewunmi. All rights reserved.`;
+
+            // Intersection Observer for section visibility
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -616,22 +699,22 @@
                             startCountUp('years', 5, 2000, '5+');
                         }
                         if (entry.target.id === 'stats' && !isAnimating) {
+                            startCountUp('projectsCompleted', 8, 2000);
+                            startCountUp('certificationsEarned', 9, 2000);
                             startPageViewsCount();
                         }
                         if (entry.target.id === 'home') {
-                            // Trigger the 'S' animation
                             animatedS.classList.remove('animate-s');
-                            void animatedS.offsetWidth; // Force reflow to restart animation
+                            void animatedS.offsetWidth; // Force reflow
                             animatedS.classList.add('animate-s');
                         }
                     }
                 });
             }, { threshold: 0.1 });
 
-            sections.forEach(section => {
-                observer.observe(section);
-            });
+            sections.forEach(section => observer.observe(section));
 
+            // Count-up animation function
             function startCountUp(elementId, target, duration, finalText) {
                 if (isAnimating) return;
                 isAnimating = true;
@@ -656,30 +739,30 @@
                         }, 300);
                     }
                 };
-
                 updateCount();
             }
 
+            // Page views counter with localStorage
             function startPageViewsCount() {
-                const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
-                const BASE_COUNT = 138; // Initial page views count
+                const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000;
+                const BASE_COUNT = 138;
                 const lastCount = localStorage.getItem('pageViewsCount');
                 const lastUpdate = localStorage.getItem('lastUpdate');
                 const now = Date.now();
                 let currentCount = lastCount ? parseInt(lastCount, 10) : BASE_COUNT;
 
                 if (!lastUpdate || (now - parseInt(lastUpdate, 10)) >= WEEK_IN_MS) {
-                    // Increment by random number between 5 and 15
                     const increment = Math.floor(Math.random() * (15 - 5 + 1)) + 5;
                     currentCount += increment;
                     localStorage.setItem('pageViewsCount', currentCount);
                     localStorage.setItem('lastUpdate', now);
                 }
 
-                const target = Math.min(currentCount, 1000); // Cap at 1000 for animation
+                const target = Math.min(currentCount, 1000);
                 startCountUp('pageViews', target, 2000);
             }
 
+            // Toggle navigation menu
             window.toggleMenu = function() {
                 const navLinks = document.getElementById('navLinks');
                 const menuToggle = document.querySelector('.menu-toggle');
@@ -687,6 +770,15 @@
                 menuToggle.classList.toggle('active');
             };
 
+            // Keyboard accessibility for menu toggle
+            document.querySelector('.menu-toggle').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleMenu();
+                }
+            });
+
+            // Smooth scrolling for navigation links
             document.querySelectorAll('nav a').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -700,28 +792,59 @@
                         menuToggle.classList.remove('active');
                         if (targetId === '#home' && !isAnimating) {
                             startCountUp('years', 5, 2000, '5+');
-                            // Trigger the 'S' animation on navigation click
                             animatedS.classList.remove('animate-s');
-                            void animatedS.offsetWidth; // Force reflow to restart animation
+                            void animatedS.offsetWidth;
                             animatedS.classList.add('animate-s');
                         }
                         if (targetId === '#stats' && !isAnimating) {
+                            startCountUp('projectsCompleted', 8, 2000);
+                            startCountUp('certificationsEarned', 9, 2000);
                             startPageViewsCount();
                         }
                     }
                 });
             });
 
-            window.sendEmail = function() {
-                const name = document.getElementById('name').value.trim() || '';
-                const email = document.getElementById('email').value.trim() || '';
-                const message = document.getElementById('message').value.trim() || '';
+            // Dark mode toggle
+            window.toggleTheme = function() {
+                const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', theme);
+                document.querySelector('.theme-toggle i').className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            };
+
+            // Back to top button visibility
+            window.addEventListener('scroll', () => {
+                const backToTop = document.querySelector('.back-to-top');
+                backToTop.classList.toggle('visible', window.scrollY > 300);
+            });
+
+            // Form submission with validation and sanitization
+            document.getElementById('contactForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                sendEmail();
+            });
+
+            function sendEmail() {
+                const sanitizeInput = (input) => input.replace(/[<>"'&]/g, '');
+                const name = sanitizeInput(document.getElementById('name').value.trim());
+                const email = sanitizeInput(document.getElementById('email').value.trim());
+                const message = sanitizeInput(document.getElementById('message').value.trim());
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const button = document.querySelector('#contactForm button');
 
                 if (!name || !email || !message) {
                     alert('Please fill in all fields before sending.');
                     return;
                 }
+                if (!emailRegex.test(email)) {
+                    alert('Please enter a valid email address.');
+                    return;
+                }
 
+                button.disabled = true;
+                button.textContent = 'Sending...';
+
+                // Optional: Replace with backend form submission (e.g., Formspree or EmailJS)
                 const subject = encodeURIComponent(`Contact from ${name}`);
                 const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nMessage: ${message}`);
                 const mailtoLink = `mailto:work.abdulfatai@gmail.com?subject=${subject}&body=${body}`;
@@ -731,8 +854,22 @@
                     alert('Could not open email client. Please copy the email address work.abdulfatai@gmail.com and send your message manually.');
                 }
 
-                document.getElementById('contactForm').reset();
-            };
+                setTimeout(() => {
+                    button.disabled = false;
+                    button.textContent = 'Send Message';
+                    document.getElementById('contactForm').reset();
+                }, 1000);
+            }
+
+            // Track project link clicks for analytics
+            document.querySelectorAll('.project a').forEach(link => {
+                link.addEventListener('click', () => {
+                    gtag('event', 'project_view', {
+                        'event_category': 'Project',
+                        'event_label': link.closest('.project').querySelector('h3').textContent
+                    });
+                });
+            });
         });
     </script>
 </body>
