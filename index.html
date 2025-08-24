@@ -9,7 +9,7 @@
     <meta property="og:title" content="Sanusi Abdulfatai Oyewunmi - Geospatial & Remote Sensing Analyst">
     <meta property="og:description" content="Portfolio of Sanusi Abdulfatai Oyewunmi, GIS & Remote Sensing Analyst with expertise in spatial data analysis and utility network optimization.">
     <meta property="og:image" content="https://raw.githubusercontent.com/dimxxkun/Portfolio/main/mypic.jpeg">
-    <meta property="og:url" content="https://yourwebsite.com">
+    <meta property="og:url" content="https://yourwebsite.com"> <!-- TODO: Replace with actual website URL -->
     <meta name="twitter:card" content="summary_large_image">
     <title>Sanusi Abdulfatai Oyewunmi - GIS & Remote Sensing Analyst</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -19,7 +19,7 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-YOUR_ACTUAL_ID');
+      gtag('config', 'G-YOUR_ACTUAL_ID'); // TODO: Replace with actual Google Analytics ID
     </script>
     <style>
         :root {
@@ -518,7 +518,7 @@
         </nav>
         <section id="home">
             <div class="hero">
-                <img src="https://raw.githubusercontent.com/dimxxkun/Portfolio/main/mypic.jpeg" alt="Sanusi Abdulfatai Oyewunmi" class="hero-img" loading="lazy">
+                <img src="https://raw.githubusercontent.com/dimxxkun/Portfolio/main/mypic.jpeg" alt="Sanusi Abdulfatai Oyewunmi" class="hero-img" loading="lazy"> <!-- Consider hosting image locally -->
                 <h1><span class="animated-s">S</span>anusi Abdulfatai Oyewunmi</h1>
                 <h2>Geospatial & Remote Sensing Analyst | Utility Network Analyst | Esri Enterprise Certified | 3rd Place, Esri Young Scholar Award, Nigeria 2025</h2>
                 <a href="https://drive.google.com/file/d/1qBGP7FS2n1Zx_ADzn9184ZwUsrID7Os2/view?usp=sharing" class="cta-button">Download CV</a>
@@ -739,15 +739,15 @@
     <section id="stats">
         <h2>Portfolio Stats</h2>
         <div class="stats-grid">
-            <div class="stat-item">
+            <div class="stat-item" aria-label="Page Views">
                 <h3>Page Views</h3>
                 <p><span class="count-up" id="pageViews">0</span></p>
             </div>
-            <div class="stat-item">
+            <div class="stat-item" aria-label="Projects Completed"> <!-- Added aria-label for accessibility -->
                 <h3>Projects Completed</h3>
                 <p><span class="count-up" id="projectsCompleted">0</span></p>
             </div>
-            <div class="stat-item">
+            <div class="stat-item" aria-label="Certifications Earned"> <!-- Added aria-label for accessibility -->
                 <h3>Certifications Earned</h3>
                 <p><span class="count-up" id="certificationsEarned">0</span></p>
             </div>
@@ -783,8 +783,8 @@
                         }
                         if (entry.target.id === 'stats' && !isAnimating) {
                             startCountUp('pageViews', 178, 2000, '178+');
-                            startCountUp('projectsCompleted', 10, 2000, '10+');
-                            startCountUp('certificationsEarned', 15, 2000, '15+');
+                            startCountUp('projectsCompleted', 10, 2000, '10+'); // Updated as requested
+                            startCountUp('certificationsEarned', 15, 2000, '15+'); // Updated as requested
                         }
                         if (entry.target.id === 'home') {
                             animatedS.classList.remove('animate-s');
@@ -797,11 +797,12 @@
 
             sections.forEach(section => observer.observe(section));
 
-            // Count-up animation function
+            // Count-up animation function with error handling
             function startCountUp(elementId, target, duration, finalText) {
                 if (isAnimating) return;
-                isAnimating = true;
                 const element = document.getElementById(elementId);
+                if (!element) return; // Prevent errors if element is missing
+                isAnimating = true;
                 element.textContent = '0';
                 let count = 0;
                 const incrementTime = duration / target;
@@ -861,8 +862,8 @@
                         }
                         if (targetId === '#stats' && !isAnimating) {
                             startCountUp('pageViews', 178, 2000, '178+');
-                            startCountUp('projectsCompleted', 10, 2000, '10+');
-                            startCountUp('certificationsEarned', 15, 2000, '15+');
+                            startCountUp('projectsCompleted', 10, 2000, '10+'); // Updated as requested
+                            startCountUp('certificationsEarned', 15, 2000, '15+'); // Updated as requested
                         }
                     }
                 });
