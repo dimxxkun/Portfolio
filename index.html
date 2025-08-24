@@ -518,7 +518,7 @@
         </nav>
         <section id="home">
             <div class="hero">
-                <img src="https://raw.githubusercontent.com/dimxxkun/Portfolio/main/mypic.jpeg" alt="Sanusi Abdulfatai Oyewunmi" class="hero-img" loading="lazy">
+                <img src="https://raw.githubusercontent.com/dimxxkun/Portfolio/main/mypic.jpeg" alt="Sanusi Abdulfatai Oyewunmi" class="hero-img" loading="lazy"> <!-- Consider hosting image locally -->
                 <h1><span class="animated-s">S</span>anusi Abdulfatai Oyewunmi</h1>
                 <h2>Geospatial & Remote Sensing Analyst | Utility Network Analyst | Esri Enterprise Certified | 3rd Place, Esri Young Scholar Award, Nigeria 2025</h2>
                 <a href="https://drive.google.com/file/d/1qBGP7FS2n1Zx_ADzn9184ZwUsrID7Os2/view?usp=sharing" class="cta-button">Download CV</a>
@@ -743,14 +743,6 @@
                 <h3>Page Views</h3>
                 <p><span class="count-up" id="pageViews">0</span></p>
             </div>
-            <div class="stat-item" aria-label="Projects Completed">
-                <h3>Projects Completed</h3>
-                <p><span class="count-up" id="projectsCompleted">0</span></p>
-            </div>
-            <div class="stat-item" aria-label="Certifications Earned">
-                <h3>Certifications Earned</h3>
-                <p><span class="count-up" id="certificationsEarned">0</span></p>
-            </div>
         </div>
     </section>
 
@@ -765,8 +757,6 @@
             const sections = document.querySelectorAll('section');
             const yearsElement = document.getElementById('years');
             const pageViewsElement = document.getElementById('pageViews');
-            const projectsCompletedElement = document.getElementById('projectsCompleted');
-            const certificationsEarnedElement = document.getElementById('certificationsEarned');
             const animatedS = document.querySelector('.animated-s');
             let isAnimating = false;
 
@@ -786,8 +776,6 @@
                         if (entry.target.id === 'stats' && !isAnimating) {
                             console.log('Starting stats count-up'); // Debug log
                             startCountUp('pageViews', 178, 2000, '178+');
-                            startCountUp('projectsCompleted', 10, 2000, '10+');
-                            startCountUp('certificationsEarned', 15, 2000, '15+');
                         }
                         if (entry.target.id === 'home') {
                             animatedS.classList.remove('animate-s');
@@ -805,8 +793,6 @@
                 if (!isAnimating && document.getElementById('pageViews').textContent === '0') {
                     console.log('Fallback: Triggering stats count-up'); // Debug log
                     startCountUp('pageViews', 178, 2000, '178+');
-                    startCountUp('projectsCompleted', 10, 2000, '10+');
-                    startCountUp('certificationsEarned', 15, 2000, '15+');
                 }
             }, 5000);
 
@@ -881,8 +867,6 @@
                         if (targetId === '#stats' && !isAnimating) {
                             console.log('Nav click: Triggering stats count-up'); // Debug log
                             startCountUp('pageViews', 178, 2000, '178+');
-                            startCountUp('projectsCompleted', 10, 2000, '10+');
-                            startCountUp('certificationsEarned', 15, 2000, '15+');
                         }
                     }
                 });
