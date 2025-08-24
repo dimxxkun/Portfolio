@@ -518,7 +518,7 @@
         </nav>
         <section id="home">
             <div class="hero">
-                <img src="https://raw.githubusercontent.com/dimxxkun/Portfolio/main/mypic.jpeg" alt="Sanusi Abdulfatai Oyewunmi" class="hero-img" loading="lazy"> <!-- Consider hosting image locally -->
+                <img src="https://raw.githubusercontent.com/dimxxkun/Portfolio/main/mypic.jpeg" alt="Sanusi Abdulfatai Oyewunmi" class="hero-img" loading="lazy">
                 <h1><span class="animated-s">S</span>anusi Abdulfatai Oyewunmi</h1>
                 <h2>Geospatial & Remote Sensing Analyst | Utility Network Analyst | Esri Enterprise Certified | 3rd Place, Esri Young Scholar Award, Nigeria 2025</h2>
                 <a href="https://drive.google.com/file/d/1qBGP7FS2n1Zx_ADzn9184ZwUsrID7Os2/view?usp=sharing" class="cta-button">Download CV</a>
@@ -743,11 +743,11 @@
                 <h3>Page Views</h3>
                 <p><span class="count-up" id="pageViews">0</span></p>
             </div>
-            <div class="stat-item" aria-label="Projects Completed"> <!-- Added aria-label for accessibility -->
+            <div class="stat-item" aria-label="Projects Completed">
                 <h3>Projects Completed</h3>
                 <p><span class="count-up" id="projectsCompleted">0</span></p>
             </div>
-            <div class="stat-item" aria-label="Certifications Earned"> <!-- Added aria-label for accessibility -->
+            <div class="stat-item" aria-label="Certifications Earned">
                 <h3>Certifications Earned</h3>
                 <p><span class="count-up" id="certificationsEarned">0</span></p>
             </div>
@@ -777,14 +777,17 @@
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
+                        console.log(`Section ${entry.target.id} is visible`); // Debug log
                         entry.target.classList.add('visible');
                         if (entry.target.id === 'about' && !isAnimating) {
+                            console.log('Starting years count-up'); // Debug log
                             startCountUp('years', 5, 2000, '5+');
                         }
                         if (entry.target.id === 'stats' && !isAnimating) {
+                            console.log('Starting stats count-up'); // Debug log
                             startCountUp('pageViews', 178, 2000, '178+');
-                            startCountUp('projectsCompleted', 10, 2000, '10+'); // Updated as requested
-                            startCountUp('certificationsEarned', 15, 2000, '15+'); // Updated as requested
+                            startCountUp('projectsCompleted', 10, 2000, '10+');
+                            startCountUp('certificationsEarned', 15, 2000, '15+');
                         }
                         if (entry.target.id === 'home') {
                             animatedS.classList.remove('animate-s');
@@ -793,15 +796,28 @@
                         }
                     }
                 });
-            }, { threshold: 0.1 });
+            }, { threshold: 0.01 }); // Lowered threshold for better triggering
 
             sections.forEach(section => observer.observe(section));
 
+            // Fallback to trigger stats animation if not triggered after 5 seconds
+            setTimeout(() => {
+                if (!isAnimating && document.getElementById('pageViews').textContent === '0') {
+                    console.log('Fallback: Triggering stats count-up'); // Debug log
+                    startCountUp('pageViews', 178, 2000, '178+');
+                    startCountUp('projectsCompleted', 10, 2000, '10+');
+                    startCountUp('certificationsEarned', 15, 2000, '15+');
+                }
+            }, 5000);
+
             // Count-up animation function with error handling
             function startCountUp(elementId, target, duration, finalText) {
-                if (isAnimating) return;
                 const element = document.getElementById(elementId);
-                if (!element) return; // Prevent errors if element is missing
+                if (!element) {
+                    console.error(`Element with ID ${elementId} not found`); // Debug log
+                    return;
+                }
+                if (isAnimating && elementId !== 'years') return; // Allow 'years' to animate independently
                 isAnimating = true;
                 element.textContent = '0';
                 let count = 0;
@@ -820,9 +836,11 @@
                         setTimeout(() => {
                             element.classList.remove('animate');
                             isAnimating = false;
+                            console.log(`Completed count-up for ${elementId}: ${finalText}`); // Debug log
                         }, 300);
                     }
                 };
+                console.log(`Starting count-up for ${elementId} to ${target}`); // Debug log
                 updateCount();
             }
 
@@ -861,9 +879,10 @@
                             animatedS.classList.add('animate-s');
                         }
                         if (targetId === '#stats' && !isAnimating) {
+                            console.log('Nav click: Triggering stats count-up'); // Debug log
                             startCountUp('pageViews', 178, 2000, '178+');
-                            startCountUp('projectsCompleted', 10, 2000, '10+'); // Updated as requested
-                            startCountUp('certificationsEarned', 15, 2000, '15+'); // Updated as requested
+                            startCountUp('projectsCompleted', 10, 2000, '10+');
+                            startCountUp('certificationsEarned', 15, 2000, '15+');
                         }
                     }
                 });
