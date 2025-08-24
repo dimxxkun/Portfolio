@@ -6,16 +6,14 @@
     <meta name="description" content="Portfolio of Sanusi Abdulfatai Oyewunmi, GIS & Remote Sensing Analyst with expertise in spatial data analysis and utility network optimization.">
     <meta name="keywords" content="GIS, Remote Sensing, ArcGIS, Esri, Utility Network, Spatial Analysis, Sanusi Abdulfatai">
     <meta name="author" content="Sanusi Abdulfatai Oyewunmi">
-    <!-- Open Graph and Twitter Card Tags for Social Media -->
     <meta property="og:title" content="Sanusi Abdulfatai Oyewunmi - GIS & Remote Sensing Analyst">
     <meta property="og:description" content="Portfolio of Sanusi Abdulfatai Oyewunmi, GIS & Remote Sensing Analyst with expertise in spatial data analysis and utility network optimization.">
     <meta property="og:image" content="https://raw.githubusercontent.com/dimxxkun/Portfolio/main/mypic.jpeg">
     <meta property="og:url" content="https://yourwebsite.com">
     <meta name="twitter:card" content="summary_large_image">
     <title>Sanusi Abdulfatai Oyewunmi - GIS & Remote Sensing Analyst</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Google tag (gtag.js) - Replace G-YOUR_ACTUAL_ID with your actual Google Analytics ID -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YOUR_ACTUAL_ID"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -25,69 +23,93 @@
     </script>
     <style>
         :root {
-            --bg-color: #f4f4f9;
-            --text-color: #333;
-            --header-bg: linear-gradient(135deg, #2c3e50, #3498db);
-            --card-bg: white;
-            --shadow-color: rgba(0, 0, 0, 0.1);
+            --bg-color: #f5f7fa;
+            --text-color: #1a1a1a;
+            --primary-color: #0066cc;
+            --secondary-color: #ff9900;
+            --card-bg: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --header-bg: linear-gradient(135deg, #004aad, #007bff);
+            --accent-color: #e6f0ff;
         }
         [data-theme="dark"] {
-            --bg-color: #1a1a1a;
-            --text-color: #f4f4f9;
-            --header-bg: linear-gradient(135deg, #1c2526, #1e90ff);
-            --card-bg: #2c2c2c;
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --primary-color: #4da8ff;
+            --secondary-color: #ffb84d;
+            --card-bg: #1e1e1e;
             --shadow-color: rgba(255, 255, 255, 0.1);
+            --header-bg: linear-gradient(135deg, #1a2a44, #4da8ff);
+            --accent-color: #2a2a2a;
         }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
         body {
-            background-color: var(--bg-color);
+            background: var(--bg-color);
             color: var(--text-color);
-            line-height: 1.6;
+            line-height: 1.7;
+            overflow-x: hidden;
         }
         header {
             background: var(--header-bg);
             color: white;
-            text-align: center;
-            padding: 2rem 0;
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
+            z-index: 0;
         }
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1rem 5%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
+            transition: background 0.3s ease;
+        }
+        nav.scrolled {
+            background: rgba(0, 0, 0, 0.95);
         }
         .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
         }
         .nav-links {
             list-style: none;
             display: flex;
-            gap: 1.5rem;
+            gap: 2rem;
         }
         .nav-links li a {
             color: white;
             text-decoration: none;
-            font-weight: 400;
-            transition: color 0.3s, transform 0.3s;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: color 0.3s ease, transform 0.3s ease;
         }
         .nav-links li a:hover {
-            color: #ffd700;
-            transform: scale(1.1);
+            color: var(--secondary-color);
+            transform: translateY(-2px);
         }
         .menu-toggle {
             display: none;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: white;
             cursor: pointer;
             user-select: none;
@@ -103,8 +125,9 @@
                 top: 60px;
                 left: 0;
                 width: 100%;
-                background: rgba(0, 0, 0, 0.9);
-                padding: 1rem 0;
+                background: rgba(0, 0, 0, 0.95);
+                padding: 1.5rem 0;
+                border-radius: 0 0 8px 8px;
             }
             .nav-links.active {
                 display: flex;
@@ -117,57 +140,67 @@
             background: none;
             border: none;
             color: white;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             cursor: pointer;
-            margin-left: 1rem;
+            transition: transform 0.3s ease;
+        }
+        .theme-toggle:hover {
+            transform: scale(1.1);
         }
         .hero {
-            padding: 5rem 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
         }
         .hero-img {
-            width: 150px;
-            height: 150px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 1rem;
-            border: 4px solid #ffd700;
+            margin-bottom: 1.5rem;
+            border: 5px solid var(--secondary-color);
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: transform 0.3s ease;
+        }
+        .hero-img:hover {
+            transform: scale(1.05);
         }
         .hero h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
+            font-weight: 700;
             margin-bottom: 1rem;
-            display: inline-block;
-            position: relative;
+            letter-spacing: 1px;
         }
         .hero h2 {
-            font-size: 1.2rem;
-            font-weight: 300;
-            margin-bottom: 2rem;
-            word-wrap: break-word;
-            max-width: 600px;
+            font-size: 1.3rem;
+            font-weight: 400;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
         }
         .cta-button {
             display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background-color: #ffd700;
-            color: #2c3e50;
+            padding: 0.9rem 2rem;
+            background: var(--secondary-color);
+            color: #fff;
             text-decoration: none;
-            border-radius: 5px;
-            font-weight: 700;
-            transition: background-color 0.3s, transform 0.3s;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 2px 8px var(--shadow-color);
         }
         .cta-button:hover {
-            background-color: #e6c200;
-            transform: scale(1.05);
+            background: #e68a00;
+            transform: translateY(-3px);
         }
         section {
-            padding: 4rem 5%;
+            padding: 5rem 5%;
             max-width: 1200px;
             margin: 0 auto;
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(30px);
             transition: opacity 0.6s ease, transform 0.6s ease;
         }
         section.visible {
@@ -175,241 +208,287 @@
             transform: translateY(0);
         }
         h2 {
-            font-size: 2rem;
+            font-size: 2.5rem;
+            font-weight: 600;
             margin-bottom: 2rem;
-            color: #2c3e50;
+            color: var(--primary-color);
+            position: relative;
+        }
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 4px;
+            background: var(--secondary-color);
+            border-radius: 2px;
         }
         p, ul {
             margin-bottom: 1.5rem;
+            font-size: 1.1rem;
         }
         ul {
-            list-style: disc;
-            padding-left: 2rem;
+            list-style: none;
+            padding-left: 1rem;
+        }
+        ul li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        ul li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-size: 1.2rem;
         }
         .timeline .job {
             background: var(--card-bg);
-            padding: 1.5rem;
+            padding: 2rem;
             margin-bottom: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px var(--shadow-color);
-            transition: transform 0.3s ease;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .timeline .job:hover {
             transform: translateY(-5px);
+            box-shadow: 0 6px 16px var(--shadow-color);
+        }
+        .job h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        .job p {
+            font-size: 1rem;
+            color: var(--text-color);
+            opacity: 0.8;
         }
         .project-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
         }
         .project {
             background: var(--card-bg);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px var(--shadow-color);
-            transition: transform 0.3s ease;
+            padding: 1.8rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .project:hover {
             transform: translateY(-5px);
+            box-shadow: 0 6px 16px var(--shadow-color);
         }
         .project h3 {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
             margin-bottom: 0.5rem;
-            color: #2c3e50;
         }
         .project p {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            color: var(--text-color);
+            opacity: 0.8;
         }
         .project a {
-            color: #3498db;
+            color: var(--primary-color);
             text-decoration: none;
-            font-weight: 700;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
         }
         .project a:hover {
+            color: var(--secondary-color);
             text-decoration: underline;
         }
         .contact-form {
-            max-width: 500px;
-            margin-top: 1rem;
+            max-width: 600px;
+            margin: 2rem auto;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--shadow-color);
         }
         .contact-form label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
+            color: var(--primary-color);
         }
         .contact-form input, .contact-form textarea {
             width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 0.9rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
             font-size: 1rem;
+            background: var(--accent-color);
+            transition: border-color 0.3s ease;
+        }
+        .contact-form input:focus, .contact-form textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 102, 204, 0.2);
         }
         .contact-form input:invalid, .contact-form textarea:invalid {
             border-color: #e74c3c;
         }
         .contact-form button {
-            padding: 0.75rem 1.5rem;
-            background-color: #3498db;
+            padding: 0.9rem 2rem;
+            background: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
-            transition: background-color 0.3s;
             font-size: 1rem;
+            font-weight: 600;
+            transition: background 0.3s ease, transform 0.3s ease;
         }
         .contact-form button:hover {
-            background-color: #2980b9;
+            background: #0052a3;
+            transform: translateY(-2px);
         }
         .contact-form button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+            transform: none;
+        }
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
         }
         .social-links a {
-            color: #3498db;
-            margin-right: 1rem;
-            font-size: 1.5rem;
-            text-decoration: none;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            transition: color 0.3s ease, transform 0.3s ease;
         }
         .social-links a:hover {
-            color: #ffd700;
+            color: var(--secondary-color);
+            transform: scale(1.2);
         }
         @media (max-width: 768px) {
+            .hero-img {
+                width: 140px;
+                height: 140px;
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .hero h2 {
+                font-size: 1.1rem;
+            }
             .contact-form {
-                max-width: 100%;
-                padding: 0 1rem;
+                padding: 1.5rem;
             }
-            .contact-form input, .contact-form textarea {
-                font-size: 0.9rem;
+            .project-grid {
+                grid-template-columns: 1fr;
             }
-            .contact-form button {
-                width: 100%;
-                font-size: 0.9rem;
-            }
+        }
+        @media (max-width: 480px) {
             .hero-img {
                 width: 120px;
                 height: 120px;
             }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .hero h2 {
+                font-size: 1rem;
+            }
         }
         footer {
-            margin-top: 2rem;
-            padding: 1rem 5%;
+            padding: 2rem 5%;
             text-align: center;
-            background: #2c3e50;
+            background: var(--primary-color);
             color: white;
+            font-size: 0.9rem;
         }
         #education {
             margin-bottom: 2rem;
         }
-        /* Animation for count-up */
         .count-up {
             display: inline-block;
-            font-weight: 700;
-            color: #3498db;
+            font-weight: 600;
+            color: var(--secondary-color);
+            font-size: 1.5rem;
         }
         @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            60% {
-                transform: translateY(-5px);
-            }
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-8px); }
+            60% { transform: translateY(-4px); }
         }
         .count-up.animate {
             animation: bounce 0.3s ease;
         }
-        /* Stats section styling */
-        #stats {
-            text-align: center;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        .stat-item {
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px var(--shadow-color);
-            transition: transform 0.3s ease;
-        }
-        .stat-item:hover {
-            transform: translateY(-5px);
-        }
-        .stat-item h3 {
-            font-size: 1.2rem;
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-        }
-        .stat-item .count-up {
-            font-size: 2rem;
-        }
-        /* Animation for the 'S' in the name */
         .animated-s {
             display: inline-block;
             position: relative;
+            color: var(--secondary-color);
         }
         .animate-s {
             animation: moveS 3s ease-in-out forwards;
         }
         @keyframes moveS {
-            0% {
-                transform: translate(0, 0) rotate(0deg);
-                opacity: 0;
-            }
-            20% {
-                transform: translate(50px, -50px) rotate(90deg);
-                opacity: 0.5;
-            }
-            40% {
-                transform: translate(-50px, 50px) rotate(180deg);
-                opacity: 0.7;
-            }
-            60% {
-                transform: translate(30px, -30px) rotate(270deg);
-                opacity: 0.9;
-            }
-            80% {
-                transform: translate(-20px, 20px) rotate(360deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(0, 0) rotate(360deg);
-                opacity: 1;
-            }
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+            20% { transform: translate(40px, -40px) rotate(90deg); opacity: 0.5; }
+            40% { transform: translate(-40px, 40px) rotate(180deg); opacity: 0.7; }
+            60% { transform: translate(20px, -20px) rotate(270deg); opacity: 0.9; }
+            80% { transform: translate(-10px, 10px) rotate(360deg); opacity: 1; }
+            100% { transform: translate(0, 0) rotate(360deg); opacity: 1; }
         }
         @media (prefers-reduced-motion: reduce) {
-            .animated-s {
-                animation: none;
-            }
-            .count-up.animate {
-                animation: none;
-            }
+            .animated-s { animation: none; }
+            .count-up.animate { animation: none; }
         }
-        /* Back to Top Button */
         .back-to-top {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 30px;
+            right: 30px;
             display: none;
-            padding: 10px 15px;
-            background-color: #3498db;
+            padding: 0.8rem 1.2rem;
+            background: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 50%;
             cursor: pointer;
             z-index: 1000;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        .back-to-top:hover {
+            background: #0052a3;
+            transform: scale(1.1);
         }
         .back-to-top.visible {
             display: block;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .stat-item {
+            background: var(--card-bg);
+            padding: 1.8rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px var(--shadow-color);
+        }
+        .stat-item h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
         }
     </style>
 </head>
@@ -434,7 +513,6 @@
         </nav>
         <section id="home">
             <div class="hero">
-                <!-- Integrated raw image URL from GitHub -->
                 <img src="https://raw.githubusercontent.com/dimxxkun/Portfolio/main/mypic.jpeg" alt="Sanusi Abdulfatai Oyewunmi" class="hero-img" loading="lazy">
                 <h1><span class="animated-s">S</span>anusi Abdulfatai Oyewunmi</h1>
                 <h2>GIS & Remote Sensing Analyst | Utility Network Analyst | Esri Enterprise Certified | 3rd Place, Esri Young Scholar Award, Nigeria 2025</h2>
@@ -796,6 +874,8 @@
             window.addEventListener('scroll', () => {
                 const backToTop = document.querySelector('.back-to-top');
                 backToTop.classList.toggle('visible', window.scrollY > 300);
+                const nav = document.querySelector('nav');
+                nav.classList.toggle('scrolled', window.scrollY > 50);
             });
 
             // Form submission with validation and sanitization
@@ -824,7 +904,6 @@
                 button.disabled = true;
                 button.textContent = 'Sending...';
 
-                // Optional: Replace with backend form submission (e.g., Formspree or EmailJS)
                 const subject = encodeURIComponent(`Contact from ${name}`);
                 const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nMessage: ${message}`);
                 const mailtoLink = `mailto:work.abdulfatai@gmail.com?subject=${subject}&body=${body}`;
