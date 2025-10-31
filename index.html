@@ -2142,6 +2142,33 @@
             }
 
             setupIntersectionObserver() {
+                // Use more mobile-friendly IntersectionObserver options
+                const observerOptions = {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px' // Trigger slightly before element is fully visible
+                };
+
+                // Check if elements are already visible on load (common on mobile)
+                const checkInitialVisibility = () => {
+                    const aboutSection = document.getElementById('about');
+                    const statsSection = document.getElementById('stats');
+                    
+                    if (aboutSection && this.isElementVisible(aboutSection)) {
+                        setTimeout(() => {
+                            this.startCountUp('years', 5, 2000, '5+');
+                        }, 300);
+                    }
+                    
+                    if (statsSection && this.isElementVisible(statsSection)) {
+                        setTimeout(() => {
+                            this.startCountUp('pageViews', 178, 2000, '178+');
+                            this.startCountUp('yearsExp', 5, 2000, '5+');
+                            this.startCountUp('projectsCount', 8, 2000, '8+');
+                            this.startCountUp('certifications', 10, 2000, '10+');
+                        }, 300);
+                    }
+                };
+
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
@@ -2149,23 +2176,53 @@
                             
                             // Trigger count-up animations
                             if (entry.target.id === 'about') {
-                                this.startCountUp('years', 5, 2000, '5+');
+                                // Small delay to ensure visibility on mobile
+                                setTimeout(() => {
+                                    this.startCountUp('years', 5, 2000, '5+');
+                                }, 100);
                             }
                             
                             if (entry.target.id === 'stats') {
-                                this.startCountUp('pageViews', 178, 2000, '178+');
-                                this.startCountUp('yearsExp', 5, 2000, '5+');
-                                this.startCountUp('projectsCount', 8, 2000, '8+');
-                                this.startCountUp('certifications', 10, 2000, '10+');
+                                // Small delay to ensure visibility on mobile
+                                setTimeout(() => {
+                                    this.startCountUp('pageViews', 178, 2000, '178+');
+                                    this.startCountUp('yearsExp', 5, 2000, '5+');
+                                    this.startCountUp('projectsCount', 8, 2000, '8+');
+                                    this.startCountUp('certifications', 10, 2000, '10+');
+                                }, 100);
                             }
+
+                            // Stop observing once triggered (prevents re-triggering)
+                            observer.unobserve(entry.target);
                         }
                     });
-                }, { threshold: 0.1 });
+                }, observerOptions);
 
                 // Observe all sections
                 document.querySelectorAll('section').forEach(section => {
                     observer.observe(section);
                 });
+
+                // Check initial visibility after a short delay (for mobile devices)
+                setTimeout(checkInitialVisibility, 500);
+            }
+
+            isElementVisible(element) {
+                const rect = element.getBoundingClientRect();
+                const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+                const windowWidth = window.innerWidth || document.documentElement.clientWidth;
+                
+                return (
+                    rect.top >= 0 &&
+                    rect.left >= 0 &&
+                    rect.bottom <= windowHeight &&
+                    rect.right <= windowWidth
+                ) || (
+                    rect.top < windowHeight &&
+                    rect.bottom > 0 &&
+                    rect.left < windowWidth &&
+                    rect.right > 0
+                );
             }
 
             setupRevealAnimations() {
@@ -2362,25 +2419,59 @@
                 element.dataset.animated = 'true';
                 
                 element.textContent = '0';
-                let count = 0;
-                const incrementTime = duration / target;
+                const startValue = 0;
+                const endValue = target;
+                
+                // Use performance.now() for better mobile compatibility
+                const startTime = performance.now();
 
-                const updateCount = () => {
-                    if (count < target) {
-                        count++;
-                        element.textContent = count;
-                        element.classList.add('animate');
-                        setTimeout(() => element.classList.remove('animate'), 300);
-                        setTimeout(updateCount, incrementTime);
+                // Use requestAnimationFrame for smoother mobile performance
+                const animate = () => {
+                    const currentTime = performance.now();
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    // Easing function for smooth animation
+                    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                    const current = Math.floor(easeOutQuart * (endValue - startValue) + startValue);
+                    
+                    // Update text content
+                    element.textContent = current > 0 ? current : '0';
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
                     } else {
-                        element.textContent = finalText || count;
+                        // Animation complete
+                        element.textContent = finalText || endValue;
                         element.classList.add('animate');
                         setTimeout(() => {
                             element.classList.remove('animate');
                         }, 300);
                     }
                 };
-                updateCount();
+
+                // Start animation - ensure it runs even if page is in background
+                if (typeof requestAnimationFrame !== 'undefined') {
+                    requestAnimationFrame(animate);
+                } else {
+                    // Fallback for older browsers
+                    let count = 0;
+                    const incrementTime = duration / target;
+                    const fallbackUpdate = () => {
+                        if (count < target) {
+                            count++;
+                            element.textContent = count;
+                            setTimeout(fallbackUpdate, incrementTime);
+                        } else {
+                            element.textContent = finalText || endValue;
+                            element.classList.add('animate');
+                            setTimeout(() => {
+                                element.classList.remove('animate');
+                            }, 300);
+                        }
+                    };
+                    setTimeout(fallbackUpdate, incrementTime);
+                }
             }
 
             handleKeyboardNavigation(e) {
