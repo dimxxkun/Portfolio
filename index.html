@@ -2142,87 +2142,141 @@
             }
 
             setupIntersectionObserver() {
-                // Use more mobile-friendly IntersectionObserver options
-                const observerOptions = {
-                    threshold: 0.1,
-                    rootMargin: '0px 0px -50px 0px' // Trigger slightly before element is fully visible
+                // Track which animations have been triggered
+                const triggered = {
+                    years: false,
+                    pageViews: false,
+                    yearsExp: false,
+                    projectsCount: false,
+                    certifications: false
                 };
 
-                // Check if elements are already visible on load (common on mobile)
-                const checkInitialVisibility = () => {
+                const triggerCountUp = (type, section) => {
+                    if (type === 'about' && !triggered.years) {
+                        triggered.years = true;
+                        this.startCountUp('years', 5, 2000, '5+');
+                    }
+                    
+                    if (type === 'stats' && !triggered.pageViews) {
+                        triggered.pageViews = true;
+                        triggered.yearsExp = true;
+                        triggered.projectsCount = true;
+                        triggered.certifications = true;
+                        this.startCountUp('pageViews', 178, 2000, '178+');
+                        this.startCountUp('yearsExp', 5, 2000, '5+');
+                        this.startCountUp('projectsCount', 8, 2000, '8+');
+                        this.startCountUp('certifications', 10, 2000, '10+');
+                    }
+                };
+
+                // Mobile-optimized visibility check
+                const checkVisibility = () => {
                     const aboutSection = document.getElementById('about');
                     const statsSection = document.getElementById('stats');
                     
-                    if (aboutSection && this.isElementVisible(aboutSection)) {
-                        setTimeout(() => {
-                            this.startCountUp('years', 5, 2000, '5+');
-                        }, 300);
+                    if (aboutSection && this.isElementInViewport(aboutSection) && !triggered.years) {
+                        triggerCountUp('about', aboutSection);
                     }
                     
-                    if (statsSection && this.isElementVisible(statsSection)) {
-                        setTimeout(() => {
-                            this.startCountUp('pageViews', 178, 2000, '178+');
-                            this.startCountUp('yearsExp', 5, 2000, '5+');
-                            this.startCountUp('projectsCount', 8, 2000, '8+');
-                            this.startCountUp('certifications', 10, 2000, '10+');
-                        }, 300);
+                    if (statsSection && this.isElementInViewport(statsSection) && !triggered.pageViews) {
+                        triggerCountUp('stats', statsSection);
                     }
                 };
 
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('visible');
-                            
-                            // Trigger count-up animations
-                            if (entry.target.id === 'about') {
-                                // Small delay to ensure visibility on mobile
-                                setTimeout(() => {
-                                    this.startCountUp('years', 5, 2000, '5+');
-                                }, 100);
-                            }
-                            
-                            if (entry.target.id === 'stats') {
-                                // Small delay to ensure visibility on mobile
-                                setTimeout(() => {
-                                    this.startCountUp('pageViews', 178, 2000, '178+');
-                                    this.startCountUp('yearsExp', 5, 2000, '5+');
-                                    this.startCountUp('projectsCount', 8, 2000, '8+');
-                                    this.startCountUp('certifications', 10, 2000, '10+');
-                                }, 100);
-                            }
+                // Use IntersectionObserver with mobile-friendly settings
+                if ('IntersectionObserver' in window) {
+                    const observerOptions = {
+                        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5],
+                        rootMargin: '0px 0px -10% 0px'
+                    };
 
-                            // Stop observing once triggered (prevents re-triggering)
-                            observer.unobserve(entry.target);
-                        }
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting && entry.intersectionRatio > 0) {
+                                entry.target.classList.add('visible');
+                                
+                                if (entry.target.id === 'about') {
+                                    triggerCountUp('about', entry.target);
+                                }
+                                
+                                if (entry.target.id === 'stats') {
+                                    triggerCountUp('stats', entry.target);
+                                }
+                            }
+                        });
+                    }, observerOptions);
+
+                    // Observe sections
+                    document.querySelectorAll('section[id="about"], section[id="stats"]').forEach(section => {
+                        observer.observe(section);
                     });
-                }, observerOptions);
+                }
 
-                // Observe all sections
-                document.querySelectorAll('section').forEach(section => {
-                    observer.observe(section);
+                // Mobile scroll fallback - more reliable on mobile
+                if (this.isMobile) {
+                    // Check on scroll with throttling
+                    let scrollTimeout;
+                    const handleScroll = () => {
+                        if (scrollTimeout) {
+                            clearTimeout(scrollTimeout);
+                        }
+                        scrollTimeout = setTimeout(() => {
+                            checkVisibility();
+                        }, 100);
+                    };
+
+                    window.addEventListener('scroll', handleScroll, { passive: true });
+                    window.addEventListener('touchmove', handleScroll, { passive: true });
+                }
+
+                // Check immediately and after delays (mobile-friendly)
+                checkVisibility();
+                setTimeout(checkVisibility, 300);
+                setTimeout(checkVisibility, 800);
+                setTimeout(checkVisibility, 1500);
+                setTimeout(checkVisibility, 2500); // Extra check for slow mobile devices
+
+                // Also check on window load and resize
+                window.addEventListener('load', () => {
+                    setTimeout(checkVisibility, 200);
+                    setTimeout(checkVisibility, 500); // Double check after load
                 });
 
-                // Check initial visibility after a short delay (for mobile devices)
-                setTimeout(checkInitialVisibility, 500);
+                if (this.isMobile) {
+                    window.addEventListener('resize', () => {
+                        setTimeout(checkVisibility, 200);
+                    });
+                    
+                    // Mobile fallback: Final check after 3 seconds
+                    // Uses more lenient visibility check for mobile
+                    setTimeout(() => {
+                        checkVisibility();
+                    }, 3000);
+                }
             }
 
-            isElementVisible(element) {
+            isElementInViewport(element) {
+                if (!element) return false;
+                
                 const rect = element.getBoundingClientRect();
                 const windowHeight = window.innerHeight || document.documentElement.clientHeight;
                 const windowWidth = window.innerWidth || document.documentElement.clientWidth;
                 
-                return (
-                    rect.top >= 0 &&
-                    rect.left >= 0 &&
-                    rect.bottom <= windowHeight &&
-                    rect.right <= windowWidth
-                ) || (
+                // More lenient check for mobile - element is in viewport if any part is visible
+                const isVisible = (
                     rect.top < windowHeight &&
                     rect.bottom > 0 &&
                     rect.left < windowWidth &&
                     rect.right > 0
                 );
+                
+                // For mobile, also check if element is within 200px of viewport
+                const isNearViewport = this.isMobile && (
+                    (rect.top < windowHeight + 200 && rect.bottom > -200) ||
+                    (rect.top >= 0 && rect.top < windowHeight * 0.8)
+                );
+                
+                return isVisible || isNearViewport;
             }
 
             setupRevealAnimations() {
@@ -2412,65 +2466,79 @@
 
             startCountUp(elementId, target, duration, finalText) {
                 const element = document.getElementById(elementId);
-                if (!element) return;
+                if (!element) {
+                    console.warn(`Element with id "${elementId}" not found`);
+                    return;
+                }
                 
-                // Check if already animated
-                if (element.dataset.animated === 'true') return;
+                // Check if already animated or completed
+                if (element.dataset.animated === 'true' || element.dataset.animated === 'complete') {
+                    return;
+                }
                 element.dataset.animated = 'true';
                 
                 element.textContent = '0';
                 const startValue = 0;
                 const endValue = target;
                 
-                // Use performance.now() for better mobile compatibility
-                const startTime = performance.now();
-
-                // Use requestAnimationFrame for smoother mobile performance
-                const animate = () => {
-                    const currentTime = performance.now();
-                    const elapsed = currentTime - startTime;
-                    const progress = Math.min(elapsed / duration, 1);
-                    
-                    // Easing function for smooth animation
-                    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-                    const current = Math.floor(easeOutQuart * (endValue - startValue) + startValue);
-                    
-                    // Update text content
-                    element.textContent = current > 0 ? current : '0';
-                    
-                    if (progress < 1) {
-                        requestAnimationFrame(animate);
-                    } else {
-                        // Animation complete
-                        element.textContent = finalText || endValue;
-                        element.classList.add('animate');
-                        setTimeout(() => {
-                            element.classList.remove('animate');
-                        }, 300);
-                    }
-                };
-
-                // Start animation - ensure it runs even if page is in background
-                if (typeof requestAnimationFrame !== 'undefined') {
-                    requestAnimationFrame(animate);
-                } else {
-                    // Fallback for older browsers
+                // Use simpler approach for mobile - setTimeout is more reliable than requestAnimationFrame on some mobile browsers
+                if (this.isMobile) {
+                    // Mobile-optimized: use setTimeout with smaller increments
                     let count = 0;
-                    const incrementTime = duration / target;
-                    const fallbackUpdate = () => {
+                    const steps = Math.max(30, Math.min(60, target)); // More steps for smoother animation
+                    const increment = target / steps;
+                    const stepDuration = duration / steps;
+                    
+                    const mobileAnimate = () => {
+                        count += increment;
+                        const displayValue = Math.floor(Math.min(count, target));
+                        element.textContent = displayValue > 0 ? displayValue : '0';
+                        
                         if (count < target) {
-                            count++;
-                            element.textContent = count;
-                            setTimeout(fallbackUpdate, incrementTime);
+                            setTimeout(mobileAnimate, stepDuration);
                         } else {
+                            // Animation complete
                             element.textContent = finalText || endValue;
+                            element.dataset.animated = 'complete';
                             element.classList.add('animate');
                             setTimeout(() => {
                                 element.classList.remove('animate');
                             }, 300);
                         }
                     };
-                    setTimeout(fallbackUpdate, incrementTime);
+                    
+                    // Small initial delay for mobile
+                    setTimeout(() => {
+                        mobileAnimate();
+                    }, 50);
+                } else {
+                    // Desktop: use requestAnimationFrame for smoother animation
+                    const startTime = performance.now();
+
+                    const animate = () => {
+                        const currentTime = performance.now();
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        
+                        // Easing function for smooth animation
+                        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                        const current = Math.floor(easeOutQuart * (endValue - startValue) + startValue);
+                        
+                        element.textContent = current > 0 ? current : '0';
+                        
+                        if (progress < 1) {
+                            requestAnimationFrame(animate);
+                        } else {
+                            element.textContent = finalText || endValue;
+                            element.dataset.animated = 'complete';
+                            element.classList.add('animate');
+                            setTimeout(() => {
+                                element.classList.remove('animate');
+                            }, 300);
+                        }
+                    };
+
+                    requestAnimationFrame(animate);
                 }
             }
 
