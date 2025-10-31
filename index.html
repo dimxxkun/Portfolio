@@ -2151,10 +2151,13 @@
                     certifications: false
                 };
 
-                const triggerCountUp = (type, section) => {
+                const triggerCountUp = (type) => {
                     if (type === 'about' && !triggered.years) {
                         triggered.years = true;
-                        this.startCountUp('years', 5, 2000, '5+');
+                        // Force trigger immediately
+                        setTimeout(() => {
+                            this.startCountUp('years', 5, 2000, '5+');
+                        }, 100);
                     }
                     
                     if (type === 'stats' && !triggered.pageViews) {
@@ -2162,32 +2165,51 @@
                         triggered.yearsExp = true;
                         triggered.projectsCount = true;
                         triggered.certifications = true;
-                        this.startCountUp('pageViews', 178, 2000, '178+');
-                        this.startCountUp('yearsExp', 5, 2000, '5+');
-                        this.startCountUp('projectsCount', 8, 2000, '8+');
-                        this.startCountUp('certifications', 10, 2000, '10+');
+                        // Force trigger all stats immediately
+                        setTimeout(() => {
+                            this.startCountUp('pageViews', 178, 2000, '178+');
+                            this.startCountUp('yearsExp', 5, 2000, '5+');
+                            this.startCountUp('projectsCount', 8, 2000, '8+');
+                            this.startCountUp('certifications', 10, 2000, '10+');
+                        }, 100);
                     }
                 };
 
-                // Mobile-optimized visibility check
+                // Universal visibility check - works everywhere
                 const checkVisibility = () => {
                     const aboutSection = document.getElementById('about');
                     const statsSection = document.getElementById('stats');
                     
-                    if (aboutSection && this.isElementInViewport(aboutSection) && !triggered.years) {
-                        triggerCountUp('about', aboutSection);
+                    if (aboutSection && this.isElementInViewport(aboutSection)) {
+                        triggerCountUp('about');
                     }
                     
-                    if (statsSection && this.isElementInViewport(statsSection) && !triggered.pageViews) {
-                        triggerCountUp('stats', statsSection);
+                    if (statsSection && this.isElementInViewport(statsSection)) {
+                        triggerCountUp('stats');
                     }
                 };
 
-                // Use IntersectionObserver with mobile-friendly settings
+                // ALWAYS use scroll listeners - more reliable than IntersectionObserver on mobile
+                let scrollTimeout;
+                const handleScroll = () => {
+                    if (scrollTimeout) {
+                        clearTimeout(scrollTimeout);
+                    }
+                    scrollTimeout = setTimeout(() => {
+                        checkVisibility();
+                    }, 50); // More frequent checks
+                };
+
+                // Add scroll listeners ALWAYS (not just mobile)
+                window.addEventListener('scroll', handleScroll, { passive: true });
+                window.addEventListener('touchmove', handleScroll, { passive: true });
+                window.addEventListener('wheel', handleScroll, { passive: true });
+
+                // Use IntersectionObserver as primary method (still good for desktop)
                 if ('IntersectionObserver' in window) {
                     const observerOptions = {
                         threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5],
-                        rootMargin: '0px 0px -10% 0px'
+                        rootMargin: '0px 0px -5% 0px' // More lenient margin
                     };
 
                     const observer = new IntersectionObserver((entries) => {
@@ -2196,87 +2218,95 @@
                                 entry.target.classList.add('visible');
                                 
                                 if (entry.target.id === 'about') {
-                                    triggerCountUp('about', entry.target);
+                                    triggerCountUp('about');
                                 }
                                 
                                 if (entry.target.id === 'stats') {
-                                    triggerCountUp('stats', entry.target);
+                                    triggerCountUp('stats');
                                 }
                             }
                         });
                     }, observerOptions);
 
                     // Observe sections
-                    document.querySelectorAll('section[id="about"], section[id="stats"]').forEach(section => {
-                        observer.observe(section);
-                    });
+                    const aboutSection = document.getElementById('about');
+                    const statsSection = document.getElementById('stats');
+                    if (aboutSection) observer.observe(aboutSection);
+                    if (statsSection) observer.observe(statsSection);
                 }
 
-                // Mobile scroll fallback - more reliable on mobile
-                if (this.isMobile) {
-                    // Check on scroll with throttling
-                    let scrollTimeout;
-                    const handleScroll = () => {
-                        if (scrollTimeout) {
-                            clearTimeout(scrollTimeout);
-                        }
-                        scrollTimeout = setTimeout(() => {
-                            checkVisibility();
-                        }, 100);
-                    };
+                // Aggressive initial checks - multiple attempts
+                const runChecks = () => {
+                    checkVisibility();
+                    setTimeout(checkVisibility, 100);
+                    setTimeout(checkVisibility, 300);
+                    setTimeout(checkVisibility, 500);
+                    setTimeout(checkVisibility, 800);
+                    setTimeout(checkVisibility, 1200);
+                    setTimeout(checkVisibility, 2000);
+                    setTimeout(checkVisibility, 3000);
+                };
 
-                    window.addEventListener('scroll', handleScroll, { passive: true });
-                    window.addEventListener('touchmove', handleScroll, { passive: true });
+                // Run checks immediately
+                runChecks();
+
+                // Run checks when DOM is ready
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', runChecks);
                 }
 
-                // Check immediately and after delays (mobile-friendly)
-                checkVisibility();
-                setTimeout(checkVisibility, 300);
-                setTimeout(checkVisibility, 800);
-                setTimeout(checkVisibility, 1500);
-                setTimeout(checkVisibility, 2500); // Extra check for slow mobile devices
-
-                // Also check on window load and resize
+                // Run checks on window load
                 window.addEventListener('load', () => {
-                    setTimeout(checkVisibility, 200);
-                    setTimeout(checkVisibility, 500); // Double check after load
+                    setTimeout(runChecks, 100);
                 });
 
-                if (this.isMobile) {
-                    window.addEventListener('resize', () => {
-                        setTimeout(checkVisibility, 200);
-                    });
+                // Run checks on resize
+                window.addEventListener('resize', () => {
+                    setTimeout(checkVisibility, 100);
+                });
+
+                // ULTIMATE FALLBACK: Force trigger after 4 seconds regardless
+                setTimeout(() => {
+                    const aboutEl = document.getElementById('years');
+                    const statsEl = document.getElementById('pageViews');
                     
-                    // Mobile fallback: Final check after 3 seconds
-                    // Uses more lenient visibility check for mobile
-                    setTimeout(() => {
-                        checkVisibility();
-                    }, 3000);
-                }
+                    // If elements still show 0, force trigger
+                    if (aboutEl && aboutEl.textContent === '0' && !triggered.years) {
+                        triggerCountUp('about');
+                    }
+                    if (statsEl && statsEl.textContent === '0' && !triggered.pageViews) {
+                        triggerCountUp('stats');
+                    }
+                }, 4000);
             }
 
             isElementInViewport(element) {
                 if (!element) return false;
                 
-                const rect = element.getBoundingClientRect();
-                const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-                const windowWidth = window.innerWidth || document.documentElement.clientWidth;
-                
-                // More lenient check for mobile - element is in viewport if any part is visible
-                const isVisible = (
-                    rect.top < windowHeight &&
-                    rect.bottom > 0 &&
-                    rect.left < windowWidth &&
-                    rect.right > 0
-                );
-                
-                // For mobile, also check if element is within 200px of viewport
-                const isNearViewport = this.isMobile && (
-                    (rect.top < windowHeight + 200 && rect.bottom > -200) ||
-                    (rect.top >= 0 && rect.top < windowHeight * 0.8)
-                );
-                
-                return isVisible || isNearViewport;
+                try {
+                    const rect = element.getBoundingClientRect();
+                    const windowHeight = window.innerHeight || document.documentElement.clientHeight || screen.height;
+                    const windowWidth = window.innerWidth || document.documentElement.clientWidth || screen.width;
+                    
+                    // Very lenient check - element is visible if ANY part is in or near viewport
+                    const isVisible = (
+                        rect.top < windowHeight + 300 &&  // 300px below viewport
+                        rect.bottom > -300 &&              // 300px above viewport
+                        rect.left < windowWidth + 300 &&
+                        rect.right > -300
+                    );
+                    
+                    // Also check if element top is in upper 90% of viewport
+                    const isInViewport = (
+                        rect.top >= 0 &&
+                        rect.top < windowHeight * 0.9
+                    );
+                    
+                    return isVisible || isInViewport;
+                } catch (e) {
+                    // If getBoundingClientRect fails, assume element is visible
+                    return true;
+                }
             }
 
             setupRevealAnimations() {
@@ -2465,9 +2495,21 @@
             }
 
             startCountUp(elementId, target, duration, finalText) {
-                const element = document.getElementById(elementId);
+                // Find element - try multiple methods
+                let element = document.getElementById(elementId);
                 if (!element) {
-                    console.warn(`Element with id "${elementId}" not found`);
+                    // Try finding by class if ID fails
+                    const elements = document.querySelectorAll(`.count-up`);
+                    for (let el of elements) {
+                        if (el.id === elementId) {
+                            element = el;
+                            break;
+                        }
+                    }
+                }
+                
+                if (!element) {
+                    console.error(`Element with id "${elementId}" not found`);
                     return;
                 }
                 
@@ -2475,71 +2517,66 @@
                 if (element.dataset.animated === 'true' || element.dataset.animated === 'complete') {
                     return;
                 }
-                element.dataset.animated = 'true';
                 
+                // Mark as started immediately
+                element.dataset.animated = 'true';
                 element.textContent = '0';
+                
                 const startValue = 0;
                 const endValue = target;
                 
-                // Use simpler approach for mobile - setTimeout is more reliable than requestAnimationFrame on some mobile browsers
-                if (this.isMobile) {
-                    // Mobile-optimized: use setTimeout with smaller increments
-                    let count = 0;
-                    const steps = Math.max(30, Math.min(60, target)); // More steps for smoother animation
-                    const increment = target / steps;
-                    const stepDuration = duration / steps;
-                    
-                    const mobileAnimate = () => {
-                        count += increment;
-                        const displayValue = Math.floor(Math.min(count, target));
-                        element.textContent = displayValue > 0 ? displayValue : '0';
-                        
-                        if (count < target) {
-                            setTimeout(mobileAnimate, stepDuration);
-                        } else {
-                            // Animation complete
-                            element.textContent = finalText || endValue;
-                            element.dataset.animated = 'complete';
-                            element.classList.add('animate');
-                            setTimeout(() => {
-                                element.classList.remove('animate');
-                            }, 300);
-                        }
-                    };
-                    
-                    // Small initial delay for mobile
-                    setTimeout(() => {
-                        mobileAnimate();
-                    }, 50);
+                // ALWAYS use setTimeout approach - more reliable across all devices
+                // Calculate steps based on target value for smooth animation
+                let steps;
+                if (target <= 10) {
+                    steps = target * 10; // 10 steps per number for small targets
+                } else if (target <= 100) {
+                    steps = 50; // Fixed 50 steps for medium targets
                 } else {
-                    // Desktop: use requestAnimationFrame for smoother animation
-                    const startTime = performance.now();
-
-                    const animate = () => {
-                        const currentTime = performance.now();
-                        const elapsed = currentTime - startTime;
-                        const progress = Math.min(elapsed / duration, 1);
-                        
-                        // Easing function for smooth animation
-                        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-                        const current = Math.floor(easeOutQuart * (endValue - startValue) + startValue);
-                        
-                        element.textContent = current > 0 ? current : '0';
-                        
-                        if (progress < 1) {
-                            requestAnimationFrame(animate);
-                        } else {
-                            element.textContent = finalText || endValue;
-                            element.dataset.animated = 'complete';
-                            element.classList.add('animate');
-                            setTimeout(() => {
-                                element.classList.remove('animate');
-                            }, 300);
-                        }
-                    };
-
-                    requestAnimationFrame(animate);
+                    steps = 60; // Fixed 60 steps for large targets
                 }
+                
+                const increment = endValue / steps;
+                const stepDuration = Math.max(10, duration / steps); // Minimum 10ms per step
+                
+                let count = 0;
+                let animationId;
+                
+                const animate = () => {
+                    count += increment;
+                    const displayValue = Math.floor(Math.min(count, endValue));
+                    
+                    // Always update text, even if 0 (to show progress)
+                    element.textContent = displayValue > 0 ? displayValue : '0';
+                    
+                    if (count < endValue) {
+                        animationId = setTimeout(animate, stepDuration);
+                    } else {
+                        // Animation complete
+                        element.textContent = finalText || endValue;
+                        element.dataset.animated = 'complete';
+                        
+                        // Add animation class briefly
+                        element.classList.add('animate');
+                        setTimeout(() => {
+                            if (element.classList) {
+                                element.classList.remove('animate');
+                            }
+                        }, 300);
+                    }
+                };
+                
+                // Start animation immediately - no delay
+                animate();
+                
+                // Safety timeout - force complete if animation takes too long
+                setTimeout(() => {
+                    if (element.dataset.animated !== 'complete') {
+                        if (animationId) clearTimeout(animationId);
+                        element.textContent = finalText || endValue;
+                        element.dataset.animated = 'complete';
+                    }
+                }, duration + 1000); // Add 1 second buffer
             }
 
             handleKeyboardNavigation(e) {
